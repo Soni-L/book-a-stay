@@ -5,13 +5,13 @@ const useLocalStorageArray = (key) => {
   const [items, setItems] = useLocalStorage(key, []);
 
   const addItem = (newItem) => {
-    const newItemWithId = { id: uuidv4(), ...newItem };
+    const newItemWithId = { ...newItem, id: uuidv4() };
     setItems([...items, newItemWithId]);
   };
 
-  const getItems = () => {
-    return items;
-  };
+  // const getItems = () => {
+  //   return items;
+  // };
 
   const getItemById = (id) => {
     return items.find((item) => item.id === id);
@@ -34,7 +34,7 @@ const useLocalStorageArray = (key) => {
 
   return {
     addItem,
-    getItems,
+    items,
     getItemById,
     deleteItem,
     updateItem,

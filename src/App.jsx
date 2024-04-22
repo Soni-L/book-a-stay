@@ -14,7 +14,7 @@ let theme = createTheme({
 });
 
 function App() {
-  const { addItem, getItems, getItemById, deleteItem, updateItem } =
+  const { items, getItemById, deleteItem, updateItem } =
     useLocalStorageArray("myBookings");
   const [newBookingModalOpen, setNewBookingModalOpen] = useState(false);
 
@@ -24,16 +24,32 @@ function App() {
         <nav className="navbar-main">
           <h2 style={{ color: "#005477" }}>Book a stay</h2>
         </nav>
-        <div
-          className="body--main"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <PseudoSearchBar onClick={() => setNewBookingModalOpen(true)} />
-        </div>
+        {items.length === 0 ? (
+          <div
+            className="body--main"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <PseudoSearchBar onClick={() => setNewBookingModalOpen(true)} />
+          </div>
+        ) : (
+          <div
+            className="body--main"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "start",
+            }}
+          >
+            <PseudoSearchBar onClick={() => setNewBookingModalOpen(true)} />
+            {items.map((booking) => (
+              <div key={booking.id}>{booking.name}</div>
+            ))}
+          </div>
+        )}
         <NewBookingModal
           open={newBookingModalOpen}
           onClose={() => setNewBookingModalOpen(false)}

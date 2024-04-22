@@ -8,8 +8,12 @@ import {
   IconButton,
   Typography,
   Slide,
+  Stepper,
+  Step,
+  StepLabel,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import useLocalStorageArray from "../../hooks/useLocalStorageArray";
 import dayjs from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -111,17 +115,32 @@ const SEARCH_STATE = {
 };
 
 export default function NewBookingModal({ open, onClose }) {
+  const { addItem } = useLocalStorageArray("myBookings");
+  const [activeStep, setActiveStep] = React.useState(0);
   const [searchState, setSearchState] = React.useState(SEARCH_STATE.CLEAR);
+  const [selectedProperty, setSelectedProperty] = React.useState(null);
   const [startDate, setStartDate] = React.useState(dayjs());
   const [endDate, setEndDate] = React.useState(dayjs());
 
   const clearfields = () => {
     setSearchState(SEARCH_STATE.CLEAR);
+    setActiveStep(0);
+    setSelectedProperty(null);
   };
 
   const handleClose = () => {
     clearfields();
     onClose();
+  };
+
+  const handleCreateBooking = () => {
+    addItem(selectedProperty);
+    handleClose();
+  };
+
+  const onPropertySelect = (property) => {
+    setSelectedProperty(property);
+    setActiveStep(1);
   };
   return (
     <React.Fragment>
@@ -146,47 +165,103 @@ export default function NewBookingModal({ open, onClose }) {
             </Typography>
           </Toolbar>
         </AppBar>
-        <div style={{ height: "calc(100vh - 60px)", overflowY: "scroll" }}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer
-              components={["DatePicker", "DatePicker"]}
-              sx={{ padding: "16px" }}
+        <div style={{ height: "calc(100vh - 100px)", overflowY: "scroll" }}>
+          <Stepper
+            activeStep={activeStep}
+            sx={{
+              padding: "8px",
+              height: "40px",
+              maxWidth: "500px",
+              margin: "auto",
+            }}
+          >
+            <Step>
+              <StepLabel>Search for available properties</StepLabel>
+            </Step>
+            <Step>
+              <StepLabel>Complete booking</StepLabel>
+            </Step>
+          </Stepper>
+          {activeStep === 0 && (
+            <>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer
+                  components={["DatePicker", "DatePicker"]}
+                  sx={{ padding: "16px" }}
+                >
+                  <DatePicker
+                    label="Start date"
+                    value={startDate}
+                    onChange={(newValue) => setStartDate(newValue)}
+                  />
+                  <DatePicker
+                    label="End date"
+                    value={endDate}
+                    onChange={(newValue) => setEndDate(newValue)}
+                  />
+                  <Button
+                    variant="contained"
+                    onClick={() => setSearchState(SEARCH_STATE.DONE)}
+                    style={{ maxWidth: "200px" }}
+                  >
+                    Search
+                  </Button>
+                </DemoContainer>
+              </LocalizationProvider>
+              {searchState === SEARCH_STATE.DONE && (
+                <div className="vacation-rental-grid">
+                  {vacationRentals.map((rental) => (
+                    <div
+                      key={rental.id}
+                      className="rental-card"
+                      onClick={() => onPropertySelect(rental)}
+                    >
+                      <img
+                        src={rental.imageUrl}
+                        alt={rental.name}
+                        className="rental-image"
+                      />
+                      <div className="rental-details">
+                        <h3 className="rental-name">{rental.name}</h3>
+                        <p className="rental-location">{rental.location}</p>
+                        <p className="rental-type">{rental.type}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+
+          {activeStep === 1 && (
+            <div
+              style={{
+                maxWidth: "500px",
+                margin: "auto",
+                paddingTop: "20px",
+              }}
             >
-              <DatePicker
-                label="Start date"
-                value={startDate}
-                onChange={(newValue) => setStartDate(newValue)}
-              />
-              <DatePicker
-                label="End date"
-                value={endDate}
-                onChange={(newValue) => setEndDate(newValue)}
-              />
+              <div key={selectedProperty.id}>
+                <img
+                  src={selectedProperty.imageUrl}
+                  alt={selectedProperty.name}
+                  className="rental-image"
+                />
+                <div className="rental-details">
+                  <h3 className="rental-name">{selectedProperty.name}</h3>
+                  <p className="rental-location">{selectedProperty.location}</p>
+                  <p className="rental-type">{selectedProperty.type}</p>
+                </div>
+              </div>
+              <h3>From: {"today"} </h3>
+              <h3>From: {"tomorrow"} </h3>
               <Button
                 variant="contained"
-                onClick={() => setSearchState(SEARCH_STATE.DONE)}
-                style={{ maxWidth: "200px" }}
+                style={{ margin: "auto" }}
+                onClick={handleCreateBooking}
               >
-                Search
+                Book this property
               </Button>
-            </DemoContainer>
-          </LocalizationProvider>
-          {searchState === SEARCH_STATE.DONE && (
-            <div className="vacation-rental-grid">
-              {vacationRentals.map((rental) => (
-                <div key={rental.id} className="rental-card">
-                  <img
-                    src={rental.imageUrl}
-                    alt={rental.name}
-                    className="rental-image"
-                  />
-                  <div className="rental-details">
-                    <h3 className="rental-name">{rental.name}</h3>
-                    <p className="rental-location">{rental.location}</p>
-                    <p className="rental-type">{rental.type}</p>
-                  </div>
-                </div>
-              ))}
             </div>
           )}
         </div>
