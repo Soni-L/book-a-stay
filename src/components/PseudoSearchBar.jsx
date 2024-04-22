@@ -3,23 +3,23 @@ import SearchIcon from "@mui/icons-material/Search";
 
 export default function PseudoSearchBar({ onClick }) {
   return (
-    <Paper elevation={8} sx={{ borderRadius: "16px" }}>
-      <Button
-        size="large"
-        aria-label="search"
-        onClick={onClick}
-        elevation={4}
-        color="primary"
-        style={{
-          backgroundColor: "white",
-          padding: "8px",
-          textTransform: "none",
-          borderRadius: "12px",
-        }}
-        endIcon={<SearchIcon />}
-      >
-        Book your next vacation
-      </Button>
-    </Paper>
+    <Button
+      size="large"
+      aria-label="search"
+      onClick={onClick}
+      elevation={4}
+      color="primary"
+      style={{
+        backgroundColor: "white",
+        padding: "8px 24px",
+        textTransform: "none",
+        borderRadius: "24px",
+        boxShadow: "2px 2px gray",
+        border: '1px solid'
+      }}
+      endIcon={<SearchIcon />}
+    >
+      Book your next vacation
+    </Button>
   );
 }

@@ -66,7 +66,7 @@ function App() {
                 label="My bookings"
                 variant="outlined"
                 color="primary"
-                sx={{ margin: "8px 0", backgroundColor: 'white' }}
+                sx={{ margin: "8px 0", backgroundColor: "white" }}
               />
               {items.map((booking) => (
                 <Paper
