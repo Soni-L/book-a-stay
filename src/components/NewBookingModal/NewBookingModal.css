@@ -1,0 +1,42 @@
+.vacation-rental-grid {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(300px, 1fr)
+  ); /* Flexible grid with minimum width of 250px */
+  gap: 20px; /* Gap between grid items */
+}
+
+.rental-card {
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.rental-card:hover {
+  border: 1px solid lightblue;
+  transform: scale(1.1);
+}
+.rental-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover; /* Ensure the image covers the entire container */
+}
+
+.rental-details {
+  padding: 15px;
+}
+
+.rental-name {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.rental-location,
+.rental-type {
+  margin: 5px 0;
+  font-size: 0.9rem;
+}
