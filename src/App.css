@@ -9,8 +9,16 @@
 .navbar-main {
   height: var(--navbar-desktop-height);
   position: static;
-  background-color: #005477;
+  background-color: white;
   display: flex;
   align-items: center;
-  padding-left: 8px;
+  padding-left: 24px;
+}
+
+.body--main {
+  height: calc(100vh - var(--navbar-desktop-height));
+  background-image: url("/src/assets/images/shipwreck-navagio-wallpaper.jpg");
+   background-repeat: no-repeat;
+   background-position: center; 
+   background-size: cover;
 }

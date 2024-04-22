@@ -1,15 +1,27 @@
 import { useState } from "react";
 import "./App.css";
+import useLocalStorageArray from "./hooks/useLocalStorageArray";
+import PseudoSearchBar from "./components/PseudoSearchBar";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const { addItem, getItems, getItemById, deleteItem, updateItem } =
+    useLocalStorageArray("myBookings");
 
   return (
     <>
       <nav className="navbar-main">
-        <h3 style={{ color: "white", fontFamily: "Helvetica" }}>Book a stay</h3>
+        <h2 style={{ color: "#005477" }}>Book a stay</h2>
       </nav>
-      <div style={{ height: "calc(100vh - 60px)" }}></div>
+      <div
+        className="body--main"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <PseudoSearchBar />
+      </div>
     </>
   );
 }
