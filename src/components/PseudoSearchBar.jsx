@@ -1,4 +1,4 @@
-import { Button, Paper } from "@mui/material";
+import { Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 export default function PseudoSearchBar({ onClick }) {
@@ -14,7 +14,7 @@ export default function PseudoSearchBar({ onClick }) {
         padding: "8px 24px",
         textTransform: "none",
         borderRadius: "24px",
-        boxShadow: "2px 2px gray",
+        boxShadow: "1px 2px gray",
         border: '1px solid'
       }}
       endIcon={<SearchIcon />}

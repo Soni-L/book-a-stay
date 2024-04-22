@@ -14,11 +14,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useLocalStorageArray from "../../hooks/useLocalStorageArray";
-import dayjs from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import DateRangePicker from "../DateRangePicker/DateRangePicker";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -119,8 +115,6 @@ export default function NewBookingModal({ open, onClose }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [searchState, setSearchState] = React.useState(SEARCH_STATE.CLEAR);
   const [selectedProperty, setSelectedProperty] = React.useState(null);
-  const [startDate, setStartDate] = React.useState(dayjs());
-  const [endDate, setEndDate] = React.useState(dayjs());
 
   const clearfields = () => {
     setSearchState(SEARCH_STATE.CLEAR);
@@ -170,9 +164,8 @@ export default function NewBookingModal({ open, onClose }) {
             activeStep={activeStep}
             sx={{
               padding: "8px",
-              height: "40px",
               maxWidth: "500px",
-              margin: "auto",
+              margin: "8px auto",
             }}
           >
             <Step>
@@ -184,30 +177,17 @@ export default function NewBookingModal({ open, onClose }) {
           </Stepper>
           {activeStep === 0 && (
             <>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer
-                  components={["DatePicker", "DatePicker"]}
-                  sx={{ padding: "16px" }}
+              <div style={{ display: "flex", justifyContent: 'center', gap: '16px', margin: '16px' }}>
+                <DateRangePicker />
+                <Button
+                  variant="contained"
+                  onClick={() => setSearchState(SEARCH_STATE.DONE)}
+                  style={{ maxWidth: "200px", height: '40px' }}
                 >
-                  <DatePicker
-                    label="Start date"
-                    value={startDate}
-                    onChange={(newValue) => setStartDate(newValue)}
-                  />
-                  <DatePicker
-                    label="End date"
-                    value={endDate}
-                    onChange={(newValue) => setEndDate(newValue)}
-                  />
-                  <Button
-                    variant="contained"
-                    onClick={() => setSearchState(SEARCH_STATE.DONE)}
-                    style={{ maxWidth: "200px" }}
-                  >
-                    Search
-                  </Button>
-                </DemoContainer>
-              </LocalizationProvider>
+                  Search
+                </Button>
+              </div>
+
               {searchState === SEARCH_STATE.DONE && (
                 <div className="vacation-rental-grid">
                   {vacationRentals.map((rental) => (
