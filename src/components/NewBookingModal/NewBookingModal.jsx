@@ -130,7 +130,7 @@ export default function NewBookingModal({ open, onClose }) {
   };
 
   const handleCreateBooking = () => {
-    addItem(selectedProperty);
+    addItem({ ...selectedProperty, propertyId: selectedProperty.id });
     handleClose();
   };
 
