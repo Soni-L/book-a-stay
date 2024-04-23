@@ -130,7 +130,12 @@ export default function NewBookingModal({ open, onClose }) {
   };
 
   const handleCreateBooking = () => {
-    addItem({ ...selectedProperty, propertyId: selectedProperty.id });
+    addItem({
+      ...selectedProperty,
+      propertyId: selectedProperty.id,
+      checkIn: dateRange[0].format("DD/MM/YYYY"),
+      checkOut: dateRange[1].format("DD/MM/YYYY"),
+    });
     handleClose();
   };
 
