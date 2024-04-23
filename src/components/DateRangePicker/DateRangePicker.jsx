@@ -3,7 +3,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import dayjs from "dayjs";
-import { Button } from "@mui/material";
+import { Button, Menu } from "@mui/material";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 
 function ServerDay(props) {
@@ -50,9 +50,11 @@ export default function DateRangePicker({ onDateRangeSelection }) {
   const handleDateRangeSelection = (date) => {
     if (!startDate && !endDate) {
       setStartDate(date);
+      setHighlightedDays([]);
     } else if (startDate && endDate) {
       setStartDate(date);
       setEndDate(null);
+      setHighlightedDays([]);
     } else if (startDate.diff(date) >= 0) {
       setStartDate(date);
     } else {
@@ -60,35 +62,51 @@ export default function DateRangePicker({ onDateRangeSelection }) {
     }
   };
 
+
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <div style={{ maxWidth: "400px" }}>
+    <div style={{ width: "300px" }}>
       <Button
         variant="contained"
         style={{ height: "40px", textTransform: "none", width: "100%" }}
+        onClick={handleClick}
       >
         {startDate ? startDate.format("DD MMM YYYY") : `Check in`} -{" "}
         {endDate ? endDate.format("DD MMM YYYY") : "Check out"}
       </Button>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DateCalendar
-          disablePast={true}
-          sx={{
-            boxShadow: "2px 2px 2px",
-            marginTop: "4px",
-            border: "1px solid gray",
-            borderRadius: "4px",
-          }}
-          onChange={(newValue) => handleDateRangeSelection(newValue)}
-          slots={{
-            day: ServerDay,
-          }}
-          slotProps={{
-            day: {
-              highlightedDays,
-            },
-          }}
-        />
-      </LocalizationProvider>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DateCalendar
+            disablePast={true}
+            onChange={(newValue) => handleDateRangeSelection(newValue)}
+            slots={{
+              day: ServerDay,
+            }}
+            slotProps={{
+              day: {
+                highlightedDays,
+              },
+            }}
+          />
+        </LocalizationProvider>
+      </Menu>
     </div>
   );
 }

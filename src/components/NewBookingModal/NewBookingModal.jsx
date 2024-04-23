@@ -188,6 +188,7 @@ export default function NewBookingModal({ open, onClose }) {
                 style={{
                   display: "flex",
                   justifyContent: "center",
+                  wrap: 'flex-wrap',
                   gap: "16px",
                   margin: "16px",
                 }}
@@ -199,6 +200,7 @@ export default function NewBookingModal({ open, onClose }) {
                   variant="contained"
                   onClick={() => setSearchState(SEARCH_STATE.DONE)}
                   style={{ maxWidth: "200px", height: "40px" }}
+                  disabled={(dateRange.length > 0 && dateRange[0] && dateRange[1]) ? false : true}
                 >
                   Search
                 </Button>
