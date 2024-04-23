@@ -5,8 +5,9 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import dayjs from "dayjs";
 import { Button, Menu } from "@mui/material";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-function ServerDay(props) {
+function HighlightedDays(props) {
   const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
   const isSelected =
     highlightedDays.length > 0
@@ -76,8 +77,14 @@ export default function DateRangePicker({ onDateRangeSelection }) {
   return (
     <div style={{ width: "300px" }}>
       <Button
-        variant="contained"
-        style={{ height: "40px", textTransform: "none", width: "100%" }}
+        variant="outlined"
+        startIcon={<CalendarMonthIcon />}
+        style={{
+          height: "40px",
+          textTransform: "none",
+          width: "100%",
+          borderRadius: "8px",
+        }}
         onClick={handleClick}
       >
         {startDate ? startDate.format("DD MMM YYYY") : `Check in`} -{" "}
@@ -97,7 +104,7 @@ export default function DateRangePicker({ onDateRangeSelection }) {
             disablePast={true}
             onChange={(newValue) => handleDateRangeSelection(newValue)}
             slots={{
-              day: ServerDay,
+              day: HighlightedDays,
             }}
             slotProps={{
               day: {

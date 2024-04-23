@@ -111,17 +111,114 @@ const SEARCH_STATE = {
   NO_DATA: "NO_DATA",
 };
 
+function overlapConditions(
+  attemptedCheckIn,
+  attemptedCheckout,
+  currentBookingCheckIn,
+  currentBookingCheckOut
+) {
+  let caseOne =
+    attemptedCheckIn.diff(dayjs(currentBookingCheckIn, "DD/MM/YYYY"), "days") < 0 
+    && attemptedCheckout.diff(dayjs(currentBookingCheckIn, "DD/MM/YYYY"),"days") > 0
+    && attemptedCheckout.diff(dayjs(currentBookingCheckOut, "DD/MM/YYYY"),"days") < 0;
+
+  let caseTwo =
+    attemptedCheckIn.diff(dayjs(currentBookingCheckOut, "DD/MM/YYYY"), "days") <
+      0 &&
+    attemptedCheckout.diff(
+      dayjs(currentBookingCheckOut, "DD/MM/YYYY"),
+      "days"
+    ) >= 0;
+
+  let caseThree =
+    attemptedCheckIn.diff(dayjs(currentBookingCheckIn, "DD/MM/YYYY"), "days") >=
+      0 &&
+    attemptedCheckout.diff(
+      dayjs(currentBookingCheckOut, "DD/MM/YYYY"),
+      "days"
+    ) <= 0;
+
+  let caseFour =
+    attemptedCheckIn.diff(dayjs(currentBookingCheckIn, "DD/MM/YYYY"), "days") <=
+      0 &&
+    attemptedCheckout.diff(
+      dayjs(currentBookingCheckOut, "DD/MM/YYYY"),
+      "days"
+    ) >= 0;
+
+  return caseOne || caseTwo || caseThree || caseFour;
+}
+
+function propertyHasDateOverlap(
+  propertyId,
+  bookings,
+  attemptedCheckIn,
+  attemptedCheckout
+) {
+  let currentPropBookings = bookings.filter(
+    (booking) => propertyId == booking.propertyId
+  );
+
+  let overlap = false;
+
+  currentPropBookings.forEach((currentProp) => {
+    if (
+      overlapConditions(
+        attemptedCheckIn,
+        attemptedCheckout,
+        currentProp.checkIn,
+        currentProp.checkOut
+      ) === true
+    ) {
+      overlap = true;
+    }
+  });
+
+  if (overlap) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 export default function NewBookingModal({ open, onClose }) {
-  const { addItem } = useLocalStorageArray("myBookings");
+  const { items, addItem } = useLocalStorageArray("myBookings");
   const [activeStep, setActiveStep] = React.useState(0);
   const [searchState, setSearchState] = React.useState(SEARCH_STATE.CLEAR);
   const [selectedProperty, setSelectedProperty] = React.useState(null);
   const [dateRange, setDateRange] = React.useState([]);
+  const [availableProperties, setAvailableProperties] = React.useState([]);
+
+  const propertyWithoutDateOverlap = (
+    bookings,
+    properties,
+    checkIn,
+    checkOut
+  ) => {
+    let filteredProperties = properties.filter(
+      (property) =>
+        propertyHasDateOverlap(property.id, bookings, checkIn, checkOut) ===
+        false
+    );
+    return filteredProperties;
+  };
+
+  const onSearch = (dateRange) => {
+    let results = propertyWithoutDateOverlap(
+      items,
+      vacationRentals,
+      dateRange[0],
+      dateRange[1]
+    );
+    setSearchState(SEARCH_STATE.DONE);
+    setAvailableProperties(results);
+  };
 
   const clearfields = () => {
     setSearchState(SEARCH_STATE.CLEAR);
     setActiveStep(0);
     setSelectedProperty(null);
+    setDateRange([]);
   };
 
   const handleClose = () => {
@@ -143,6 +240,7 @@ export default function NewBookingModal({ open, onClose }) {
     setSelectedProperty(property);
     setActiveStep(1);
   };
+
   return (
     <React.Fragment>
       <Dialog
@@ -188,7 +286,7 @@ export default function NewBookingModal({ open, onClose }) {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  wrap: 'flex-wrap',
+                  wrap: "flex-wrap",
                   gap: "16px",
                   margin: "16px",
                 }}
@@ -198,9 +296,13 @@ export default function NewBookingModal({ open, onClose }) {
                 />
                 <Button
                   variant="contained"
-                  onClick={() => setSearchState(SEARCH_STATE.DONE)}
+                  onClick={() => onSearch(dateRange)}
                   style={{ maxWidth: "200px", height: "40px" }}
-                  disabled={(dateRange.length > 0 && dateRange[0] && dateRange[1]) ? false : true}
+                  disabled={
+                    dateRange.length > 0 && dateRange[0] && dateRange[1]
+                      ? false
+                      : true
+                  }
                 >
                   Search
                 </Button>
@@ -208,7 +310,7 @@ export default function NewBookingModal({ open, onClose }) {
 
               {searchState === SEARCH_STATE.DONE && (
                 <div className="vacation-rental-grid">
-                  {vacationRentals.map((rental) => (
+                  {availableProperties.map((rental) => (
                     <div
                       key={rental.id}
                       className="rental-card"

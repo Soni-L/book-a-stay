@@ -14,8 +14,8 @@ export default function PseudoSearchBar({ onClick }) {
         padding: "8px 24px",
         textTransform: "none",
         borderRadius: "24px",
-        boxShadow: "1px 2px gray",
-        border: '1px solid'
+        boxShadow: "2px 2px #ffb700",
+        border: "1px solid gray",
       }}
       endIcon={<SearchIcon />}
     >

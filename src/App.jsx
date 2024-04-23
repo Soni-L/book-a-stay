@@ -7,6 +7,7 @@ import NewBookingModal from "./components/NewBookingModal/NewBookingModal";
 import { Chip, Paper } from "@mui/material";
 import useUrlQueryParams from "./hooks/useUrlQueryParams";
 import ViewBookingModal from "./components/ViewBookingModal/ViewBookingModal";
+import dayjs from "dayjs";
 
 let theme = createTheme({
   palette: {
@@ -75,19 +76,29 @@ function App() {
               {items.map((booking) => (
                 <Paper
                   key={booking.id}
-                  elevation={3}
                   onClick={() => {
                     setQueryParam("bookingId", booking.id);
                     setViewBookingModalOpen(true);
                   }}
-                  sx={{
+                  style={{
                     margin: "8px 0",
                     padding: "8px",
                     cursor: "pointer",
                     borderRadius: "8px",
+                    display: "flex",
+                    justifyContent: "space-between",
                   }}
                 >
-                  {booking.name}
+                  <p style={{ margin: 0, fontWeight: "bold" }}>
+                    {booking.name}
+                  </p>
+                  <p style={{ margin: 0 }}>
+                    {dayjs(booking.checkIn, "DD/MM/YYYY").format("DD MMM YYYY")}
+                    {" - "}
+                    {dayjs(booking.checkOut, "DD/MM/YYYY").format(
+                      "DD MMM YYYY"
+                    )}
+                  </p>
                 </Paper>
               ))}
             </Paper>
