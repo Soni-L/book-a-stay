@@ -65,7 +65,7 @@ function App() {
                 padding: "8px",
                 backdropFilter: "blur(10px)",
                 backgroundColor: "transparent",
-                borderRadius: "8px",
+                borderRadius: "16px",
                 maxWidth: "var(--tablet-breakpoint)",
               }}
             >
