@@ -15,6 +15,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import useLocalStorageArray from "../../hooks/useLocalStorageArray";
 import DateRangePicker from "../DateRangePicker/DateRangePicker";
+import dayjs from "dayjs";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -115,6 +116,7 @@ export default function NewBookingModal({ open, onClose }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [searchState, setSearchState] = React.useState(SEARCH_STATE.CLEAR);
   const [selectedProperty, setSelectedProperty] = React.useState(null);
+  const [dateRange, setDateRange] = React.useState([]);
 
   const clearfields = () => {
     setSearchState(SEARCH_STATE.CLEAR);
@@ -177,12 +179,21 @@ export default function NewBookingModal({ open, onClose }) {
           </Stepper>
           {activeStep === 0 && (
             <>
-              <div style={{ display: "flex", justifyContent: 'center', gap: '16px', margin: '16px' }}>
-                <DateRangePicker />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "16px",
+                  margin: "16px",
+                }}
+              >
+                <DateRangePicker
+                  onDateRangeSelection={(range) => setDateRange(range)}
+                />
                 <Button
                   variant="contained"
                   onClick={() => setSearchState(SEARCH_STATE.DONE)}
-                  style={{ maxWidth: "200px", height: '40px' }}
+                  style={{ maxWidth: "200px", height: "40px" }}
                 >
                   Search
                 </Button>
@@ -231,10 +242,16 @@ export default function NewBookingModal({ open, onClose }) {
                   <h3 className="rental-name">{selectedProperty.name}</h3>
                   <p className="rental-location">{selectedProperty.location}</p>
                   <p className="rental-type">{selectedProperty.type}</p>
+                  <p>
+                    <em style={{ fontWeight: "bold" }}>Check in:</em>{" "}
+                    {dateRange[0].format("DD MMM YYYY")}
+                    {" - "}
+                    <em style={{ fontWeight: "bold" }}>Check out:</em>{" "}
+                    {dateRange[1].format("DD MMM YYYY")}
+                  </p>
                 </div>
               </div>
-              <h3>From: {"today"} </h3>
-              <h3>From: {"tomorrow"} </h3>
+
               <Button
                 variant="contained"
                 style={{ margin: "auto" }}
