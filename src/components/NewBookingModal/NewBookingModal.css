@@ -3,7 +3,7 @@
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
-    minmax(300px, 1fr)
+    minmax(280px, 1fr)
   ); /* Flexible grid with minimum width of 250px */
   gap: 20px; /* Gap between grid items */
 }

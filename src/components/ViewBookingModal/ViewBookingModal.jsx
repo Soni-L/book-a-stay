@@ -74,7 +74,7 @@ export default function ViewBookingModal({ open, onClose }) {
               style={{
                 maxWidth: "500px",
                 margin: "auto",
-                paddingTop: "20px",
+                padding: '8px',
               }}
             >
               <img
