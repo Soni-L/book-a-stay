@@ -9,17 +9,13 @@ const useLocalStorageArray = (key) => {
     setItems([...items, newItemWithId]);
   };
 
-  // const getItems = () => {
-  //   return items;
-  // };
-
   const getItemById = (id) => {
     return items.find((item) => item.id === id);
   };
 
   const deleteItem = (id) => {
     const updatedItems = items.filter((item) => item.id !== id);
-    setItems(updatedItems);
+    setItems([...updatedItems]);
   };
 
   const updateItem = (updatedItem) => {
@@ -29,7 +25,7 @@ const useLocalStorageArray = (key) => {
       }
       return item;
     });
-    setItems(updatedItems);
+    setItems([...updatedItems]);
   };
 
   return {

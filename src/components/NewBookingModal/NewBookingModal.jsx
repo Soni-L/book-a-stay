@@ -118,33 +118,21 @@ function overlapConditions(
   currentBookingCheckOut
 ) {
   let caseOne =
-    attemptedCheckIn.diff(dayjs(currentBookingCheckIn, "DD/MM/YYYY"), "days") < 0 
-    && attemptedCheckout.diff(dayjs(currentBookingCheckIn, "DD/MM/YYYY"),"days") > 0
-    && attemptedCheckout.diff(dayjs(currentBookingCheckOut, "DD/MM/YYYY"),"days") < 0;
+    attemptedCheckIn.diff(dayjs(currentBookingCheckIn), "days") < 0 &&
+    attemptedCheckout.diff(dayjs(currentBookingCheckIn), "days") > 0 &&
+    attemptedCheckout.diff(dayjs(currentBookingCheckOut), "days") < 0;
 
   let caseTwo =
-    attemptedCheckIn.diff(dayjs(currentBookingCheckOut, "DD/MM/YYYY"), "days") <
-      0 &&
-    attemptedCheckout.diff(
-      dayjs(currentBookingCheckOut, "DD/MM/YYYY"),
-      "days"
-    ) >= 0;
+    attemptedCheckIn.diff(dayjs(currentBookingCheckOut), "days") < 0 &&
+    attemptedCheckout.diff(dayjs(currentBookingCheckOut), "days") >= 0;
 
   let caseThree =
-    attemptedCheckIn.diff(dayjs(currentBookingCheckIn, "DD/MM/YYYY"), "days") >=
-      0 &&
-    attemptedCheckout.diff(
-      dayjs(currentBookingCheckOut, "DD/MM/YYYY"),
-      "days"
-    ) <= 0;
+    attemptedCheckIn.diff(dayjs(currentBookingCheckIn), "days") >= 0 &&
+    attemptedCheckout.diff(dayjs(currentBookingCheckOut), "days") <= 0;
 
   let caseFour =
-    attemptedCheckIn.diff(dayjs(currentBookingCheckIn, "DD/MM/YYYY"), "days") <=
-      0 &&
-    attemptedCheckout.diff(
-      dayjs(currentBookingCheckOut, "DD/MM/YYYY"),
-      "days"
-    ) >= 0;
+    attemptedCheckIn.diff(dayjs(currentBookingCheckIn), "days") <= 0 &&
+    attemptedCheckout.diff(dayjs(currentBookingCheckOut), "days") >= 0;
 
   return caseOne || caseTwo || caseThree || caseFour;
 }
@@ -230,8 +218,8 @@ export default function NewBookingModal({ open, onClose }) {
     addItem({
       ...selectedProperty,
       propertyId: selectedProperty.id,
-      checkIn: dateRange[0].format("DD/MM/YYYY"),
-      checkOut: dateRange[1].format("DD/MM/YYYY"),
+      checkIn: dateRange[0].toISOString(),
+      checkOut: dateRange[1].toISOString(),
     });
     handleClose();
   };

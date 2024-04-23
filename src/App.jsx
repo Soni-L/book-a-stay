@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import useLocalStorageArray from "./hooks/useLocalStorageArray";
@@ -30,7 +30,7 @@ function App() {
         <nav className="navbar-main">
           <h2 style={{ color: "#005477" }}>Book a stay</h2>
         </nav>
-        {items.length === 0 ? (
+        {items.length === 0 && (
           <div
             className="body-main"
             style={{
@@ -43,7 +43,9 @@ function App() {
           >
             <PseudoSearchBar onClick={() => setNewBookingModalOpen(true)} />
           </div>
-        ) : (
+        )}
+
+        {items.length > 0 && (
           <div
             className="body-main"
             style={{
@@ -93,9 +95,9 @@ function App() {
                     {booking.name}
                   </p>
                   <p style={{ margin: 0 }}>
-                    {dayjs(booking.checkIn, "DD/MM/YYYY").format("DD MMM YYYY")}
+                    {dayjs(booking.checkIn).format("DD MMM YYYY")}
                     {" - "}
-                    {dayjs(booking.checkOut, "DD/MM/YYYY").format(
+                    {dayjs(booking.checkOut).format(
                       "DD MMM YYYY"
                     )}
                   </p>
