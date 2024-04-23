@@ -4,7 +4,9 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import useLocalStorageArray from "./hooks/useLocalStorageArray";
 import PseudoSearchBar from "./components/PseudoSearchBar";
 import NewBookingModal from "./components/NewBookingModal/NewBookingModal";
-import { Chip, Paper, Typography } from "@mui/material";
+import { Chip, Paper } from "@mui/material";
+import useUrlQueryParams from "./hooks/useUrlQueryParams";
+import ViewBookingModal from "./components/ViewBookingModal/ViewBookingModal";
 
 let theme = createTheme({
   palette: {
@@ -17,7 +19,9 @@ let theme = createTheme({
 function App() {
   const { items, getItemById, deleteItem, updateItem } =
     useLocalStorageArray("myBookings");
+  const { setQueryParam } = useUrlQueryParams();
   const [newBookingModalOpen, setNewBookingModalOpen] = useState(false);
+  const [viewBookingModalOpen, setViewBookingModalOpen] = useState(false);
 
   return (
     <>
@@ -72,6 +76,10 @@ function App() {
                 <Paper
                   key={booking.id}
                   elevation={3}
+                  onClick={() => {
+                    setQueryParam("bookingId", booking.id);
+                    setViewBookingModalOpen(true);
+                  }}
                   sx={{
                     margin: "8px 0",
                     padding: "8px",
@@ -88,6 +96,10 @@ function App() {
         <NewBookingModal
           open={newBookingModalOpen}
           onClose={() => setNewBookingModalOpen(false)}
+        />
+        <ViewBookingModal
+          open={viewBookingModalOpen}
+          onClose={() => setViewBookingModalOpen(false)}
         />
       </ThemeProvider>
     </>

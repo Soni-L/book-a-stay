@@ -245,8 +245,16 @@ export default function NewBookingModal({ open, onClose }) {
                 />
                 <div className="rental-details">
                   <h3 className="rental-name">{selectedProperty.name}</h3>
-                  <p className="rental-location">{selectedProperty.location}</p>
-                  <p className="rental-type">{selectedProperty.type}</p>
+                  <p className="rental-location">
+                    {" "}
+                    <em>Location: </em>
+                    {selectedProperty.location}
+                  </p>
+                  <p className="rental-type">
+                    {" "}
+                    <em>Rental type: </em>
+                    {selectedProperty.type}
+                  </p>
                   <p>
                     <em style={{ fontWeight: "bold" }}>Check in:</em>{" "}
                     {dateRange[0].format("DD MMM YYYY")}
@@ -259,7 +267,7 @@ export default function NewBookingModal({ open, onClose }) {
 
               <Button
                 variant="contained"
-                style={{ margin: "auto" }}
+                style={{ width: "100%" }}
                 onClick={handleCreateBooking}
               >
                 Book this property

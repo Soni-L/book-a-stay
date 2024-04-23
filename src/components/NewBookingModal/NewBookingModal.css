@@ -40,3 +40,7 @@
   margin: 5px 0;
   font-size: 0.9rem;
 }
+
+em {
+  font-weight: bold;
+}
