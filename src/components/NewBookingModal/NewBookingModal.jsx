@@ -326,6 +326,7 @@ export default function NewBookingModal({ open, onClose }) {
               style={{
                 maxWidth: "500px",
                 margin: "auto",
+                padding: '8px',
                 paddingTop: "20px",
               }}
             >

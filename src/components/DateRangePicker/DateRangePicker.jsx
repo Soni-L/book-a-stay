@@ -118,6 +118,7 @@ export default function DateRangePicker({
           </Button>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateCalendar
+              style={{margin: 'auto'}}
               disablePast={true}
               onChange={(newValue) => handleDateRangeSelection(newValue)}
               slots={{
