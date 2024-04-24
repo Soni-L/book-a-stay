@@ -9,12 +9,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import DateRangePicker from "../DateRangePicker/DateRangePicker";
 import useLocalStorageArray from "../../hooks/useLocalStorageArray";
 import dayjs from "dayjs";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function CustomizedDialogs() {
+  const smallScreen = useMediaQuery("(max-width:400px)");
   const [open, setOpen] = React.useState(false);
   const { items, updateItem } = useLocalStorageArray("myBookings");
   const [bookingInView, setBookingInView] = React.useState({});
-  const [initialDates, setInitialDates] = React.useState([]);
   const [unavailableDates, setUnavailableDates] = React.useState([]);
   const [startDate, setStartDate] = React.useState(null);
   const [endDate, setEndDate] = React.useState(null);
@@ -31,7 +32,6 @@ export default function CustomizedDialogs() {
     setBookingInView(currentBooking);
     setStartDate(currentBooking.checkIn);
     setEndDate(currentBooking.checkOut);
-    setInitialDates([currentBooking.checkIn, currentBooking.checkOut]);
 
     //find all unavailable dates
 
@@ -90,24 +90,28 @@ export default function CustomizedDialogs() {
         Change Dates
       </Button>
       <Dialog
+        fullScreen={smallScreen ? true : false}
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
       >
-        <DialogTitle id="customized-dialog-title">Chose new dates</DialogTitle>
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-
+        <div>
+          <DialogTitle id="customized-dialog-title">
+            Chose new dates
+          </DialogTitle>
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </div>
         <DialogContent style={{ padding: "4px" }} dividers>
           <DateRangePicker
             initialDates={[startDate, endDate]}
@@ -126,7 +130,7 @@ export default function CustomizedDialogs() {
         </DialogContent>
 
         <DialogActions>
-          <Button autoFocus onClick={handleSave}>
+          <Button autoFocus onClick={handleSave} variant="contained">
             Save changes
           </Button>
         </DialogActions>

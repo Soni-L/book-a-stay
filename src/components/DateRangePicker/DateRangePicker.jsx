@@ -74,9 +74,26 @@ export default function DateRangePicker({
     }
   }, [startDate, endDate]);
 
-  const handleDateRangeSelection = (date) => {
+  const handleDateRangeSelection = (date, unavailableDates = []) => {
+    let hasOverlapInTheMiddleOfRange = false;
+
+    if (unavailableDates.length > 0 && startDate) {
+      let unavailableDatesInBetween = unavailableDates.filter(
+        (unavailableDate) =>
+          unavailableDate.diff(startDate) > 0 && unavailableDate.diff(date) < 0
+      );
+
+      if(unavailableDatesInBetween.length > 0){
+        hasOverlapInTheMiddleOfRange = true;
+      }
+    }
+
     if (!startDate && !endDate) {
       setStartDate(date);
+      setHighlightedDays([]);
+    } else if (startDate && !endDate && hasOverlapInTheMiddleOfRange) {
+      setStartDate(date);
+      setEndDate(null);
       setHighlightedDays([]);
     } else if (startDate && endDate) {
       setStartDate(date);
@@ -118,9 +135,11 @@ export default function DateRangePicker({
           </Button>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateCalendar
-              style={{margin: 'auto'}}
+              style={{ margin: "auto" }}
               disablePast={true}
-              onChange={(newValue) => handleDateRangeSelection(newValue)}
+              onChange={(newValue) =>
+                handleDateRangeSelection(newValue, unavailableDates)
+              }
               slots={{
                 day: HighlightedDays,
               }}
