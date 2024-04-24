@@ -12,8 +12,9 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import useLocalStorageArray from "../../hooks/useLocalStorageArray";
 import useUrlQueryParams from "../../hooks/useUrlQueryParams";
+import EditStayModal from "./EditStayModal";
 // import DateRangePicker from "../DateRangePicker/DateRangePicker";
-// import dayjs from "dayjs";
+import dayjs from "dayjs";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -74,7 +75,7 @@ export default function ViewBookingModal({ open, onClose }) {
               style={{
                 maxWidth: "500px",
                 margin: "auto",
-                padding: '8px',
+                padding: "8px",
               }}
             >
               <img
@@ -94,17 +95,19 @@ export default function ViewBookingModal({ open, onClose }) {
                 </p>
                 <p>
                   <em style={{ fontWeight: "bold" }}>Check in:</em>{" "}
-                  {bookingInView.checkIn}
-                  {" - "}
-                  <em style={{ fontWeight: "bold" }}>Check out:</em>{" "}
-                  {bookingInView.checkOut}
+                  {dayjs(bookingInView.checkIn).format("DD MMM YYYY")}
                 </p>
+                <p>
+                  <em style={{ fontWeight: "bold" }}>Check out:</em>{" "}
+                  {dayjs(bookingInView.checkOut).format("DD MMM YYYY")}
+                </p>
+                <EditStayModal />
               </div>
 
               <Button
                 variant="contained"
                 color="error"
-                style={{ width: "100%" }}
+                style={{ width: "100%", marginTop: "50px" }}
                 onClick={() => handleDelete(bookingInView.id)}
               >
                 Delete this booking

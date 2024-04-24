@@ -20,9 +20,14 @@ let theme = createTheme({
 function App() {
   const { items, getItemById, deleteItem, updateItem } =
     useLocalStorageArray("myBookings");
-  const { setQueryParam } = useUrlQueryParams();
+  const { queryParams, setQueryParam } = useUrlQueryParams();
   const [newBookingModalOpen, setNewBookingModalOpen] = useState(false);
   const [viewBookingModalOpen, setViewBookingModalOpen] = useState(false);
+
+  useEffect(() => {
+    console.log(queryParams);
+    if (queryParams.bookingId) setViewBookingModalOpen(true);
+  }, []);
 
   return (
     <>
@@ -97,9 +102,7 @@ function App() {
                   <p style={{ margin: 0 }}>
                     {dayjs(booking.checkIn).format("DD MMM YYYY")}
                     {" - "}
-                    {dayjs(booking.checkOut).format(
-                      "DD MMM YYYY"
-                    )}
+                    {dayjs(booking.checkOut).format("DD MMM YYYY")}
                   </p>
                 </Paper>
               ))}

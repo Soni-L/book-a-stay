@@ -8,11 +8,24 @@ import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 function HighlightedDays(props) {
-  const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
+  const {
+    highlightedDays = [],
+    unavailableDates = [],
+    day,
+    outsideCurrentMonth,
+    ...other
+  } = props;
   const isSelected =
     highlightedDays.length > 0
       ? highlightedDays.filter(
           (currentDate) => currentDate.diff(day, "day") === 0
+        ).length > 0
+      : false;
+
+  const isUnavailable =
+    unavailableDates.length > 0
+      ? unavailableDates.filter(
+          (currentDate) => dayjs(currentDate).diff(day, "day") === 0
         ).length > 0
       : false;
 
@@ -22,14 +35,26 @@ function HighlightedDays(props) {
       outsideCurrentMonth={outsideCurrentMonth}
       selected={isSelected}
       day={day}
+      disabled={isUnavailable || dayjs(day).isBefore(dayjs(), "day")}
     />
   );
 }
 
-export default function DateRangePicker({ onDateRangeSelection }) {
+export default function DateRangePicker({
+  initialDates = [],
+  unavailableDates = [],
+  onDateRangeSelection,
+}) {
   const [startDate, setStartDate] = React.useState(null);
   const [endDate, setEndDate] = React.useState(null);
   const [highlightedDays, setHighlightedDays] = React.useState([]);
+
+  useEffect(() => {
+    if (initialDates.length === 2) {
+      setStartDate(dayjs(initialDates[0]));
+      setEndDate(dayjs(initialDates[1]));
+    }
+  }, []);
 
   useEffect(() => {
     function datesBetween(startDate, endDate) {
@@ -62,8 +87,6 @@ export default function DateRangePicker({ onDateRangeSelection }) {
       setEndDate(date);
     }
   };
-
-
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -109,6 +132,7 @@ export default function DateRangePicker({ onDateRangeSelection }) {
             slotProps={{
               day: {
                 highlightedDays,
+                unavailableDates,
               },
             }}
           />
