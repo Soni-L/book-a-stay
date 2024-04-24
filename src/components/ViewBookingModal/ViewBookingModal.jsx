@@ -33,7 +33,7 @@ export default function ViewBookingModal({ open, onClose }) {
       params[key] = value;
     }
     setBookingInView(items.find((item) => item.id === params.bookingId));
-  }, [open]);
+  }, [open, items]);
 
   const handleClose = () => {
     clearQueryParam("bookingId");
@@ -41,9 +41,11 @@ export default function ViewBookingModal({ open, onClose }) {
   };
 
   const handleDelete = (bookingId) => {
-    deleteItem(bookingId);
-    clearQueryParam("bookingId");
-    onClose();
+    if (confirm("Are you sure you want to cancel this booking") == true) {
+      deleteItem(bookingId);
+      clearQueryParam("bookingId");
+      onClose();
+    }
   };
 
   return (
@@ -110,7 +112,7 @@ export default function ViewBookingModal({ open, onClose }) {
                 style={{ width: "100%", marginTop: "50px" }}
                 onClick={() => handleDelete(bookingInView.id)}
               >
-                Delete this booking
+                Cancel booking
               </Button>
             </div>
           )}

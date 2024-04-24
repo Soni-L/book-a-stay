@@ -25,7 +25,6 @@ function App() {
   const [viewBookingModalOpen, setViewBookingModalOpen] = useState(false);
 
   useEffect(() => {
-    console.log(queryParams);
     if (queryParams.bookingId) setViewBookingModalOpen(true);
   }, []);
 
