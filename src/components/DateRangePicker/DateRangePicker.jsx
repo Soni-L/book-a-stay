@@ -3,7 +3,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import dayjs from "dayjs";
-import { Button, Menu } from "@mui/material";
+import { Button, ClickAwayListener } from "@mui/material";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
@@ -83,7 +83,7 @@ export default function DateRangePicker({
           unavailableDate.diff(startDate) > 0 && unavailableDate.diff(date) < 0
       );
 
-      if(unavailableDatesInBetween.length > 0){
+      if (unavailableDatesInBetween.length > 0) {
         hasOverlapInTheMiddleOfRange = true;
       }
     }
@@ -106,13 +106,17 @@ export default function DateRangePicker({
     }
   };
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const [anchorEl, setAnchorEl] = React.useState(false);
+
+  const handleClick = () => {
+    setAnchorEl((anchorEl) => !anchorEl);
   };
+
   const handleClose = () => {
-    setAnchorEl(null);
+    if (anchorEl === true) {
+      console.log("hello");
+      setAnchorEl(false);
+    }
   };
 
   return (
@@ -155,47 +159,53 @@ export default function DateRangePicker({
       )}
 
       {!expanded && (
-        <>
-          <Button
-            variant="outlined"
-            startIcon={<CalendarMonthIcon />}
-            style={{
-              height: "40px",
-              textTransform: "none",
-              width: "100%",
-              borderRadius: "8px",
-            }}
-            onClick={handleClick}
-          >
-            {startDate ? startDate.format("DD MMM YYYY") : `Check in`} -{" "}
-            {endDate ? endDate.format("DD MMM YYYY") : "Check out"}
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
-            }}
-          >
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateCalendar
-                disablePast={true}
-                onChange={(newValue) => handleDateRangeSelection(newValue)}
-                slots={{
-                  day: HighlightedDays,
-                }}
-                slotProps={{
-                  day: {
-                    highlightedDays,
-                    unavailableDates,
-                  },
-                }}
-              />
-            </LocalizationProvider>
-          </Menu>
-        </>
+        <ClickAwayListener onClickAway={handleClose}>
+          <div>
+            <Button
+              variant="outlined"
+              startIcon={<CalendarMonthIcon />}
+              style={{
+                height: "40px",
+                textTransform: "none",
+                width: "100%",
+                borderRadius: "8px",
+              }}
+              onClick={handleClick}
+            >
+              {startDate ? startDate.format("DD MMM YYYY") : `Check in`} -{" "}
+              {endDate ? endDate.format("DD MMM YYYY") : "Check out"}
+            </Button>
+
+            <div
+              style={{
+                position: "absolute",
+                backgroundColor: "white",
+                border: "1px solid gray",
+                borderRadius: "4px",
+                boxShadow: "2px 2px gray",
+                display: anchorEl ? "block" : "none",
+                zIndex: "1000",
+                marginTop: '4px'
+              }}
+            >
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateCalendar
+                  disablePast={true}
+                  onChange={(newValue) => handleDateRangeSelection(newValue)}
+                  slots={{
+                    day: HighlightedDays,
+                  }}
+                  slotProps={{
+                    day: {
+                      highlightedDays,
+                      unavailableDates,
+                    },
+                  }}
+                />
+              </LocalizationProvider>
+            </div>
+          </div>
+        </ClickAwayListener>
       )}
     </div>
   );
