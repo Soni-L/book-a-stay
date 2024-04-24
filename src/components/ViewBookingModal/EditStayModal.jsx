@@ -121,7 +121,7 @@ export default function CustomizedDialogs() {
           <CloseIcon />
         </IconButton>
 
-        <DialogContent dividers style={{ height: "200px" }}>
+        <DialogContent style={{ padding: "8px" }}>
           <DateRangePicker
             initialDates={[startDate, endDate]}
             unavailableDates={unavailableDates}
@@ -134,6 +134,7 @@ export default function CustomizedDialogs() {
                 checkOut: range[1],
               });
             }}
+            expanded={true}
           />
         </DialogContent>
 

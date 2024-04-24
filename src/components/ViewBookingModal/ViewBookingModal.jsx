@@ -78,6 +78,9 @@ export default function ViewBookingModal({ open, onClose }) {
                 maxWidth: "500px",
                 margin: "auto",
                 padding: "8px",
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column'
               }}
             >
               <img
@@ -109,7 +112,7 @@ export default function ViewBookingModal({ open, onClose }) {
               <Button
                 variant="contained"
                 color="error"
-                style={{ width: "100%", marginTop: "50px" }}
+                style={{ width: "100%", marginTop: "auto" }}
                 onClick={() => handleDelete(bookingInView.id)}
               >
                 Cancel booking

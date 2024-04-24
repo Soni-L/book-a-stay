@@ -44,6 +44,7 @@ export default function DateRangePicker({
   initialDates = [],
   unavailableDates = [],
   onDateRangeSelection,
+  expanded = false,
 }) {
   const [startDate, setStartDate] = React.useState(null);
   const [endDate, setEndDate] = React.useState(null);
@@ -98,46 +99,84 @@ export default function DateRangePicker({
   };
 
   return (
-    <div style={{ width: "300px" }}>
-      <Button
-        variant="outlined"
-        startIcon={<CalendarMonthIcon />}
-        style={{
-          height: "40px",
-          textTransform: "none",
-          width: "100%",
-          borderRadius: "8px",
-        }}
-        onClick={handleClick}
-      >
-        {startDate ? startDate.format("DD MMM YYYY") : `Check in`} -{" "}
-        {endDate ? endDate.format("DD MMM YYYY") : "Check out"}
-      </Button>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-      >
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateCalendar
-            disablePast={true}
-            onChange={(newValue) => handleDateRangeSelection(newValue)}
-            slots={{
-              day: HighlightedDays,
+    <div style={{ width: expanded ? "100%" : "300px" }}>
+      {expanded && (
+        <>
+          <Button
+            variant="outlined"
+            startIcon={<CalendarMonthIcon />}
+            style={{
+              height: "40px",
+              textTransform: "none",
+              width: "100%",
+              borderRadius: "8px",
             }}
-            slotProps={{
-              day: {
-                highlightedDays,
-                unavailableDates,
-              },
+            onClick={handleClick}
+          >
+            {startDate ? startDate.format("DD MMM YYYY") : `Check in`} -{" "}
+            {endDate ? endDate.format("DD MMM YYYY") : "Check out"}
+          </Button>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateCalendar
+              disablePast={true}
+              onChange={(newValue) => handleDateRangeSelection(newValue)}
+              slots={{
+                day: HighlightedDays,
+              }}
+              slotProps={{
+                day: {
+                  highlightedDays,
+                  unavailableDates,
+                },
+              }}
+            />
+          </LocalizationProvider>
+        </>
+      )}
+
+      {!expanded && (
+        <>
+          <Button
+            variant="outlined"
+            startIcon={<CalendarMonthIcon />}
+            style={{
+              height: "40px",
+              textTransform: "none",
+              width: "100%",
+              borderRadius: "8px",
             }}
-          />
-        </LocalizationProvider>
-      </Menu>
+            onClick={handleClick}
+          >
+            {startDate ? startDate.format("DD MMM YYYY") : `Check in`} -{" "}
+            {endDate ? endDate.format("DD MMM YYYY") : "Check out"}
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateCalendar
+                disablePast={true}
+                onChange={(newValue) => handleDateRangeSelection(newValue)}
+                slots={{
+                  day: HighlightedDays,
+                }}
+                slotProps={{
+                  day: {
+                    highlightedDays,
+                    unavailableDates,
+                  },
+                }}
+              />
+            </LocalizationProvider>
+          </Menu>
+        </>
+      )}
     </div>
   );
 }
